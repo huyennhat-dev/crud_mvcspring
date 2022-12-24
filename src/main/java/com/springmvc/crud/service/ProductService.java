@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -30,6 +32,11 @@ public class ProductService {
     }
 
     public String getAllProductPage(HttpSession session, ModelMap modelMap) {
+        Iterable<Product> products = productRepo.findAll();
+
+        Iterable<Category> categories = categoryRepo.findAll();
+        modelMap.addAttribute("products", products);
+        modelMap.addAttribute("categories", categories);
         return "admin/product/list_product";
     }
 
@@ -62,19 +69,24 @@ public class ProductService {
             return "admin/products/add";
         }
 
-        boolean permited = Arrays.asList(
+        boolean permit = Arrays.asList(
                 ContentType.IMAGE_JPEG.getMimeType(),
                 ContentType.IMAGE_PNG.getMimeType(),
                 ContentType.IMAGE_WEBP.getMimeType()
         ).contains(productPhoto.getContentType());
 
-        if (productPhoto != null && productPhoto.getSize() <= 3145728 && permited) {
+        if (productPhoto != null && productPhoto.getSize() <= 3145728 && permit) {
             Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                     "cloud_name", "huyennhat",
                     "api_key", "836136537452954",
                     "api_secret", "qsXAaQH1f5b5zcLCtXu7-p0NTto",
                     "secure", true));
-            Map uploadResult = cloudinary.uploader().upload(productPhoto.getBytes(), ObjectUtils.emptyMap());
+            Map params =  ObjectUtils.asMap(
+                    "public_id", "java/images/IMG_"+ LocalTime.now(),
+                    "overwrite", true,
+                    "resource_type", "image"
+            );
+            Map uploadResult = cloudinary.uploader().upload(productPhoto.getBytes(), params);
             String imgUrl = (String) uploadResult.get("url");
 
             if (!imgUrl.isEmpty()) {
@@ -84,6 +96,8 @@ public class ProductService {
                 pro.setCategoryID(product.getCategoryID());
                 pro.setProductPhoto(imgUrl);
                 pro.setDescription(product.getDescription());
+                pro.setUploadTime(LocalDateTime.now().toString());
+                pro.setUpdateTime(LocalDateTime.now().toString());
                 productRepo.save(pro);
             }
             return "redirect:/admin/products";

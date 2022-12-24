@@ -29,14 +29,18 @@ public class Product {
 
     @NotNull(message = "")
     @NotBlank(message = "")
-    @Size(min = 5, max = 300, message = "Mô tả không hợp lệ")
+    @Size(min = 5, max = 1000, message = "Mô tả không hợp lệ")
     private String description;
 
-
     private int status;
+
+    @Column(name = "upload_time")
+    private String uploadTime;
+    @Column(name = "update_time")
+    private String updateTime;
     public Product(){}
 
-    public Product(long id, long categoryID, String productName, String productPhoto, String slug, String description, int status) {
+    public Product(long id, long categoryID, String productName, String productPhoto, String slug, String description, int status, String uploadTime, String updateTime) {
         this.id = id;
         this.categoryID = categoryID;
         this.productName = productName;
@@ -44,6 +48,8 @@ public class Product {
         this.slug = slug;
         this.description = description;
         this.status = status;
+        this.uploadTime = uploadTime;
+        this.updateTime = updateTime;
     }
 
     public long getId() {
@@ -100,5 +106,21 @@ public class Product {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(String uploadTime) {
+        this.uploadTime = uploadTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }
