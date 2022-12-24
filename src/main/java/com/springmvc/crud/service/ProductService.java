@@ -1,6 +1,5 @@
 package com.springmvc.crud.service;
 
-import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.springmvc.crud.model.Category;
 import com.springmvc.crud.model.Product;
@@ -8,18 +7,19 @@ import com.springmvc.crud.repo.CategoryRepo;
 import com.springmvc.crud.repo.ProductRepo;
 import com.springmvc.crud.utils.Utils;
 import org.apache.http.entity.ContentType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -32,12 +32,20 @@ public class ProductService {
     }
 
     public String getAllProductPage(HttpSession session, ModelMap modelMap) {
-        Iterable<Product> products = productRepo.findAll();
+        String adminEmail = (String) session.getAttribute("email");
+        if (adminEmail != null) {
+            int adminStatusCode = (int) session.getAttribute("uStatus");
+            if (adminStatusCode >= 1) {
+                Iterable<Product> products = productRepo.findAll();
+                Iterable<Category> categories = categoryRepo.findAll();
+                modelMap.addAttribute("products", products);
+                modelMap.addAttribute("categories", categories);
+                return "admin/product/list_product";
+            }
+            return "redirect:/";
+        }
+        return "redirect:/auth/login";
 
-        Iterable<Category> categories = categoryRepo.findAll();
-        modelMap.addAttribute("products", products);
-        modelMap.addAttribute("categories", categories);
-        return "admin/product/list_product";
     }
 
     public String getAddProductPage(HttpSession session, ModelMap modelMap) {
@@ -76,18 +84,15 @@ public class ProductService {
         ).contains(productPhoto.getContentType());
 
         if (productPhoto != null && productPhoto.getSize() <= 3145728 && permit) {
-            Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                    "cloud_name", "huyennhat",
-                    "api_key", "836136537452954",
-                    "api_secret", "qsXAaQH1f5b5zcLCtXu7-p0NTto",
-                    "secure", true));
-            Map params =  ObjectUtils.asMap(
-                    "public_id", "java/images/IMG_"+ LocalTime.now(),
+
+            Map params = ObjectUtils.asMap(
+                    "public_id", "java/images/IMG_" + LocalTime.now(),
                     "overwrite", true,
                     "resource_type", "image"
             );
-            Map uploadResult = cloudinary.uploader().upload(productPhoto.getBytes(), params);
+            Map uploadResult = Utils.cloudinary.uploader().upload(productPhoto.getBytes(), params);
             String imgUrl = (String) uploadResult.get("url");
+            String imgId = (String) uploadResult.get("public_id");
 
             if (!imgUrl.isEmpty()) {
                 Product pro = new Product();
@@ -95,6 +100,10 @@ public class ProductService {
                 pro.setSlug(Utils.toSlug(product.getProductName()));
                 pro.setCategoryID(product.getCategoryID());
                 pro.setProductPhoto(imgUrl);
+                pro.setPhotoID(imgId);
+                pro.setPrice(product.getPrice());
+                pro.setQuantity(product.getQuantity());
+                pro.setQuantityPurchased(0);
                 pro.setDescription(product.getDescription());
                 pro.setUploadTime(LocalDateTime.now().toString());
                 pro.setUpdateTime(LocalDateTime.now().toString());
@@ -108,5 +117,20 @@ public class ProductService {
         modelMap.addAttribute("product", new Product());
         modelMap.addAttribute("error", "Kích thước ảnh qúa lớn!");
         return "admin/products/add";
+    }
+
+    public String delete(@NotNull HttpSession session, long id) throws IOException {
+        String adminEmail = (String) session.getAttribute("email");
+        if (adminEmail != null) {
+            int adminStatusCode = (int) session.getAttribute("uStatus");
+            if (adminStatusCode == 2) {
+                Optional<Product> pro = productRepo.findById(id);
+                Utils.cloudinary.uploader().destroy(pro.get().getPhotoID(), ObjectUtils.asMap());
+                productRepo.deleteById(id);
+                return "redirect:/admin/products";
+            }
+            return "redirect:/";
+        }
+        return "redirect:/auth/login";
     }
 }

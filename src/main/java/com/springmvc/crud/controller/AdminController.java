@@ -102,4 +102,9 @@ public class AdminController {
 
         return productService.addProduct(modelMap,image, product, bindingResult);
     }
+
+    @GetMapping("products/delete/{id}")
+    public String delProduct(HttpSession session, @PathVariable long id) throws IOException {
+        return productService.delete(session, id);
+    }
 }

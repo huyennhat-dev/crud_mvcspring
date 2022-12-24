@@ -1,5 +1,8 @@
 package com.springmvc.crud.utils;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import java.text.Normalizer;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -17,18 +20,10 @@ public class Utils {
         return slug.toLowerCase(Locale.ENGLISH);
     }
 
-    public static boolean check(String[] arr, String toCheckValue) {
-        // check if the specified element
-        // is present in the array or not
-        // using Linear Search method
-        boolean test = false;
-        for (String element : arr) {
-            if (element == toCheckValue) {
-                test = true;
-                break;
-            }
-        }
-        return test;
+    public static Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+            "cloud_name", "huyennhat",
+            "api_key", "836136537452954",
+            "api_secret", "qsXAaQH1f5b5zcLCtXu7-p0NTto",
+            "secure", true));
 
-    }
 }

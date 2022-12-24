@@ -109,7 +109,7 @@ public class CategoryService {
     }
 
     public String delete(@NotNull HttpSession session , long id){
-        String adminEmail = (String) session.getAttribute("email");
+        String adminEmail = (String)session.getAttribute("email");
         if (adminEmail!=null) {
             int adminStatusCode = (int) session.getAttribute("uStatus");
             if (adminStatusCode == 2) {
