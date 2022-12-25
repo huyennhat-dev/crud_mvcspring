@@ -16,10 +16,10 @@
 <div class="container mt-4">
     <ul class="list-group">
         <li class="list-group-item">
-            <a href="./categories">Quản lý danh mục</a>
+            <a href="./admin/categories">Quản lý danh mục</a>
         </li>
         <li class="list-group-item">
-            <a href="./products">Quản lý sản phẩm</a>
+            <a href="./admin/products">Quản lý sản phẩm</a>
         </li>
     </ul>
 </div>

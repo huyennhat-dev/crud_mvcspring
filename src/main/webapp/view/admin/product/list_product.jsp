@@ -28,11 +28,11 @@
                                 <th scope="col ">STT</th>
                                 <th class="col-1" scope="col">Hình ảnh</th>
                                 <th class="col-2" scope="col">Tên sản phẩm</th>
-                                <th class="col-2" scope="col">Tên danh mục</th>
-                                <th class="col-2" scope="col">Giá sản phẩm</th>
-                                <th class="col-2" scope="col">Trong kho</th>
-                                <th class="col-1" scope="col">Đã bán</th>
-                                <th class="col-2" scope="col">Trạng thái</th>
+                                <th class="" scope="col">Tên danh mục</th>
+                                <th class="" scope="col">Giá sản phẩm</th>
+                                <th class="" scope="col">Trong kho</th>
+                                <th class="" scope="col">Đã bán</th>
+                                <th class="col-3" scope="col">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,6 +65,7 @@
                                                 <i class="ti-face-sad"></i>
                                             </a>
                                         </c:if>
+                                        <a href="./products/${product.getId()}" class="btn btn-info"><i class="ti-eye"></i></a>
                                         <a href="./products/edit/${product.getId()}" class="btn btn-primary"><i class="ti-pencil"></i></a>
                                         <c:if test="${uStatus ==2}">
                                             <a  href="./products/delete/${product.getId()}" class="btn btn-danger"><i class="ti-trash"></i></a>

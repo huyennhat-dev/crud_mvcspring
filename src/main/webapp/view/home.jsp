@@ -97,7 +97,7 @@
                         </c:if>
                         <c:if test="${account.getStatus() >= 1}">
                             <li class="header-menu__list-items">
-                                <a href="./admin/home" class="header-menu__list-items-link">
+                                <a href="./admin" class="header-menu__list-items-link">
                                     <span class="">Quản trị</span>
                                 </a>
                             </li>

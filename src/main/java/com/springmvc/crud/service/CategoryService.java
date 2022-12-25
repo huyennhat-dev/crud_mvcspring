@@ -100,7 +100,7 @@ public class CategoryService {
                 foundCategory.setCategoryName(categoryName);
                 foundCategory.setSlug(slug);
             }
-            if(status!=cate.get().getStatus()){
+            if(status!=foundCategory.getStatus()){
                 foundCategory.setStatus(status);
             }
             categoryRepo.save(foundCategory);

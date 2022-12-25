@@ -10,6 +10,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="<c:url value=" ../../../assets/themify-icons/themify-icons.css " />" rel="stylesheet">
+
     <title>Document</title>
 </head>
 <body>
@@ -25,29 +27,39 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th scope="col">STT</th>
             <th scope="col">Tên danh mục</th>
             <th scope="col">Slug</th>
-            <th scope="col">Trạng thái</th>
+            <th class="col-2" scope="col">Trạng thái</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="category" items="${categories}">
-        <tr>
-            <th scope="row">${category.getCategoryName()}</th>
-            <td>${category.getSlug()}</td>
-            <td>
-                <c:if test="${category.getStatus() == 0}">
-                    <a class="btn btn-success">active</a>
-                </c:if>
-                <c:if test="${category.getStatus() == 1}">
-                    <a  class="btn btn-danger">un-active</a>
-                </c:if>
-                <a href="./categories/edit/${category.getId()}" class="btn btn-primary ml-4">Chỉnh sửa</a>
-                <c:if test="${uStatus ==2}">
-                <a href="./categories/delete/${category.getId()}" class="btn btn-warning ml-4">Xóa</a>
-                </c:if>
-            </td>
-        </tr>
+        <c:forEach var="category" items="${categories}" varStatus="key">
+            <tr>
+                <td>${key.index+1}</td>
+                <td scope="row">${category.getCategoryName()}</td>
+                <td>${category.getSlug()}</td>
+                <td class="text-center">
+                    <c:if test="${category.getStatus() == 0}">
+                        <a class="btn btn-success">
+                            <i class="ti-face-smile"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${category.getStatus() == 1}">
+                        <a class="btn btn-danger">
+                            <i class="ti-face-sad"></i>
+                        </a>
+                    </c:if>
+                    <a href="./categories/edit/${category.getId()}" class="btn btn-primary">
+                        <i class="ti-pencil"></i>
+                    </a>
+                    <c:if test="${uStatus ==2}">
+                        <a href="./categories/delete/${category.getId()}" class="btn btn-warning ">
+                            <i class="ti-trash"></i>
+                        </a>
+                    </c:if>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>

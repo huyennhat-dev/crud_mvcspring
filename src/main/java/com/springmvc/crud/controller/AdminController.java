@@ -8,6 +8,7 @@ import com.springmvc.crud.service.AccountService;
 import com.springmvc.crud.service.AdminService;
 import com.springmvc.crud.service.CategoryService;
 import com.springmvc.crud.service.ProductService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,7 +41,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/home")
+    @GetMapping("")
     public String getHomePage(HttpSession session) {
         return adminService.getAdminHomePage(session);
     }
@@ -107,4 +108,24 @@ public class AdminController {
     public String delProduct(HttpSession session, @PathVariable long id) throws IOException {
         return productService.delete(session, id);
     }
+
+    @GetMapping("products/{id}")
+    public String getProductPage(HttpSession session, ModelMap modelMap, @PathVariable long id){
+        return productService.getProduct(session, modelMap,id);
+    }
+
+    @GetMapping("products/edit/{id}")
+    public String getEditProductPage(HttpSession session, ModelMap modelMap, @PathVariable long id){
+        return productService.getEditProductPage(session, modelMap,id);
+    }
+
+    @PostMapping("products/edit/{id}")
+    public String updateProduct(ModelMap modelMap,
+                                @RequestParam("image") MultipartFile productPhoto,
+                                @NotNull Product product,
+                                @NotNull BindingResult bindingResult,
+                                @PathVariable long id) throws IOException {
+        return productService.updateProduct(modelMap, productPhoto, product, bindingResult, id);
+    }
+
 }

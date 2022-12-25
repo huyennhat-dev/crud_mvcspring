@@ -31,13 +31,13 @@ public class ProductService {
         this.categoryRepo = categoryRepo;
     }
 
-    public String getAllProductPage(HttpSession session, ModelMap modelMap) {
+    public String getAllProductPage(@NotNull HttpSession session, ModelMap modelMap) {
         String adminEmail = (String) session.getAttribute("email");
         if (adminEmail != null) {
             int adminStatusCode = (int) session.getAttribute("uStatus");
             if (adminStatusCode >= 1) {
                 Iterable<Product> products = productRepo.findAll();
-                Iterable<Category> categories = categoryRepo.findAll();
+                Iterable<Category> categories = categoryRepo.findAllByStatus(0);
                 modelMap.addAttribute("products", products);
                 modelMap.addAttribute("categories", categories);
                 return "admin/product/list_product";
@@ -48,12 +48,28 @@ public class ProductService {
 
     }
 
-    public String getAddProductPage(HttpSession session, ModelMap modelMap) {
+    public String getProduct(@NotNull HttpSession session, ModelMap modelMap, long id) {
         String adminEmail = (String) session.getAttribute("email");
         if (adminEmail != null) {
             int adminStatusCode = (int) session.getAttribute("uStatus");
             if (adminStatusCode >= 1) {
-                Iterable<Category> categories = categoryRepo.findAll();
+                Optional<Product> product = productRepo.findById(id);
+                Optional<Category> category = categoryRepo.findById(product.get().getCategoryID());
+                modelMap.addAttribute("product", product.get());
+                modelMap.addAttribute("category", category.get());
+                return "admin/product/detail";
+            }
+            return "redirect:/";
+        }
+        return "redirect:/auth/login";
+    }
+
+    public String getAddProductPage(@NotNull HttpSession session, ModelMap modelMap) {
+        String adminEmail = (String) session.getAttribute("email");
+        if (adminEmail != null) {
+            int adminStatusCode = (int) session.getAttribute("uStatus");
+            if (adminStatusCode >= 1) {
+                Iterable<Category> categories = categoryRepo.findAllByStatus(0);
                 modelMap.addAttribute("categories", categories);
                 modelMap.addAttribute("product", new Product());
                 return "admin/product/add";
@@ -84,9 +100,10 @@ public class ProductService {
         ).contains(productPhoto.getContentType());
 
         if (productPhoto != null && productPhoto.getSize() <= 3145728 && permit) {
+            String dateNow = LocalDateTime.now().toString();
 
             Map params = ObjectUtils.asMap(
-                    "public_id", "java/images/IMG_" + LocalTime.now(),
+                    "public_id", "java/images/IMG_" + dateNow,
                     "overwrite", true,
                     "resource_type", "image"
             );
@@ -105,8 +122,8 @@ public class ProductService {
                 pro.setQuantity(product.getQuantity());
                 pro.setQuantityPurchased(0);
                 pro.setDescription(product.getDescription());
-                pro.setUploadTime(LocalDateTime.now().toString());
-                pro.setUpdateTime(LocalDateTime.now().toString());
+                pro.setUploadTime(dateNow);
+                pro.setUpdateTime(dateNow);
                 productRepo.save(pro);
             }
             return "redirect:/admin/products";
@@ -132,5 +149,72 @@ public class ProductService {
             return "redirect:/";
         }
         return "redirect:/auth/login";
+    }
+
+    public String getEditProductPage(@NotNull HttpSession session, @NotNull ModelMap modelMap, long id) {
+        Optional<Product> product = productRepo.findById(id);
+        Iterable<Category> categories = categoryRepo.findAllByStatus(0);
+        modelMap.addAttribute("categories", categories);
+        modelMap.addAttribute("product", product);
+        return "admin/product/edit";
+    }
+
+    public String updateProduct(ModelMap modelMap,
+                                @NotNull MultipartFile productPhoto,
+                                @NotNull Product product,
+                                @NotNull BindingResult bindingResult,
+                                long id) throws IOException {
+        String productName = product.getProductName().trim();
+        long price = product.getPrice();
+        int quantity = product.getQuantity();
+        long categoryID = product.getCategoryID();
+        String desc = product.getDescription().trim();
+
+        boolean permit = Arrays.asList(
+                ContentType.IMAGE_JPEG.getMimeType(),
+                ContentType.IMAGE_PNG.getMimeType(),
+                ContentType.IMAGE_WEBP.getMimeType()
+        ).contains(productPhoto.getContentType());
+
+        if (bindingResult.hasErrors()) {
+            return "admin/product/edit";
+        }
+        Optional<Product> pro = productRepo.findById(id);
+        if (pro.isPresent()) {
+            Product foundPro = pro.get();
+            if (!productName.isEmpty()) {
+                String slug = Utils.toSlug(productName);
+                foundPro.setProductName(productName);
+                foundPro.setSlug(slug);
+            }
+            if (productPhoto != null && productPhoto.getSize() <= 3145728 && permit) {
+                String dateNow = LocalDateTime.now().toString();
+
+                Map params = ObjectUtils.asMap(
+                        "public_id", "java/images/IMG_" + dateNow,
+                        "overwrite", true,
+                        "resource_type", "image"
+                );
+                Map uploadResult = Utils.cloudinary.uploader().upload(productPhoto.getBytes(), params);
+                String imgUrl = (String) uploadResult.get("url");
+                String imgId = (String) uploadResult.get("public_id");
+                if (!imgUrl.isEmpty()) {
+                    Utils.cloudinary.uploader().destroy(pro.get().getPhotoID(), ObjectUtils.asMap());
+                    foundPro.setProductPhoto(imgUrl);
+                    foundPro.setPhotoID(imgId);
+                }
+            }
+            if (foundPro.getStatus() != product.getStatus()) {
+                foundPro.setStatus(product.getStatus());
+            }
+            if (price != foundPro.getPrice()) foundPro.setPrice(price);
+            if (quantity != foundPro.getQuantity()) foundPro.setQuantity(quantity);
+            if (categoryID != foundPro.getCategoryID()) foundPro.setCategoryID(categoryID);
+            if (!desc.isEmpty()) foundPro.setDescription(desc);
+            productRepo.save(foundPro);
+
+        }
+        return "redirect:/admin/products";
+
     }
 }
