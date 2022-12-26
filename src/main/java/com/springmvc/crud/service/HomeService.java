@@ -2,7 +2,9 @@ package com.springmvc.crud.service;
 
 import com.springmvc.crud.model.Account;
 import com.springmvc.crud.model.Category;
+import com.springmvc.crud.model.Product;
 import com.springmvc.crud.repo.CategoryRepo;
+import com.springmvc.crud.repo.ProductRepo;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import javax.servlet.http.HttpSession;
 public class HomeService {
 
     public final CategoryRepo categoryRepo;
+    public final ProductRepo productRepo;
 
-    public HomeService(CategoryRepo categoryRepo) {
+    public HomeService(CategoryRepo categoryRepo, ProductRepo productRepo) {
         this.categoryRepo = categoryRepo;
+        this.productRepo = productRepo;
     }
 
     public String getHomePage(ModelMap modelMap, @NotNull HttpSession session){
@@ -33,6 +37,9 @@ public class HomeService {
 
         Iterable<Category> categories = categoryRepo.findAll();
         modelMap.addAttribute("categories", categories);
+        Iterable<Product> products = productRepo.findAll();
+        modelMap.addAttribute("categories", categories);
+        modelMap.addAttribute("products", products);
         return  "home";
 
     }

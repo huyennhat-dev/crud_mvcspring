@@ -179,6 +179,7 @@ public class ProductService {
         if (bindingResult.hasErrors()) {
             return "admin/product/edit";
         }
+        String dateNow = LocalDateTime.now().toString();
         Optional<Product> pro = productRepo.findById(id);
         if (pro.isPresent()) {
             Product foundPro = pro.get();
@@ -188,7 +189,7 @@ public class ProductService {
                 foundPro.setSlug(slug);
             }
             if (productPhoto != null && productPhoto.getSize() <= 3145728 && permit) {
-                String dateNow = LocalDateTime.now().toString();
+
 
                 Map params = ObjectUtils.asMap(
                         "public_id", "java/images/IMG_" + dateNow,
@@ -211,6 +212,7 @@ public class ProductService {
             if (quantity != foundPro.getQuantity()) foundPro.setQuantity(quantity);
             if (categoryID != foundPro.getCategoryID()) foundPro.setCategoryID(categoryID);
             if (!desc.isEmpty()) foundPro.setDescription(desc);
+            foundPro.setUpdateTime(dateNow);
             productRepo.save(foundPro);
 
         }

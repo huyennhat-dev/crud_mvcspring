@@ -42,8 +42,8 @@ public class AdminController {
 
 
     @GetMapping("")
-    public String getHomePage(HttpSession session) {
-        return adminService.getAdminHomePage(session);
+    public String getHomePage(ModelMap modelMap, HttpSession session) {
+        return adminService.getAdminHomePage(modelMap,session);
     }
 
     @GetMapping("/categories")
@@ -126,6 +126,27 @@ public class AdminController {
                                 @NotNull BindingResult bindingResult,
                                 @PathVariable long id) throws IOException {
         return productService.updateProduct(modelMap, productPhoto, product, bindingResult, id);
+    }
+
+    @GetMapping("accounts")
+    public String accountManager(ModelMap modelMap, HttpSession session){
+        return adminService.getAccountManagerPage(modelMap, session);
+    }
+    @GetMapping("accounts/admin")
+    public String adminManager(ModelMap modelMap, HttpSession session){
+        return adminService.getAdminManagerPage(modelMap, session);
+    }
+    @GetMapping("accounts/admin/down/{id}")
+    public String adminDown(ModelMap modelMap, HttpSession session, @PathVariable long id){
+        return adminService.adminDown(modelMap, session, id);}
+    @GetMapping("accounts/user")
+    public String userManager(ModelMap modelMap, HttpSession session){
+        return adminService.getUserManagerPage(modelMap, session);
+    }
+
+    @GetMapping("accounts/user/up/{id}")
+    public String userUp(ModelMap modelMap, HttpSession session, @PathVariable long id){
+        return adminService.userUp(modelMap, session, id);
     }
 
 }
