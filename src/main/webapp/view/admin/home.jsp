@@ -22,11 +22,13 @@
                         <li class="list-group-item">
                             <a href="./admin/products">Quản lý sản phẩm</a>
                         </li>
-                        <c:if test="${uStatus>=1}">
-                            <li class="list-group-item">
-                                <a href="./admin/accounts">Quản lý tài khoản</a>
-                            </li>
-                        </c:if>
+
+                        <li class="list-group-item">
+                            <a href="./admin/accounts">Quản lý tài khoản</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="./admin/oders">Quản lý đơn đặt hàng</a>
+                        </li>
                     </ul>
                 </div>
             </body>

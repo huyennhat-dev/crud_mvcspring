@@ -25,9 +25,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="http://localhost:8081/tcv/public/assets/css/home_css.css">
     <style>
-        .ck.ck-content {
-            min-height: 400px
-        }
+
 
         .header-search_group input[type="text"] {
             right: 0%;
@@ -153,7 +151,7 @@
                                         <div class="text-danger fz-15"> ${product.getPrice()} đ</div>
                                     </div>
                                     <div class="d-flex align-items-center mt-2 py-1">
-                                        <a href="" class="mr-4">
+                                        <a href="./product/${product.getId()}" class="mr-4">
                                             <span class="d-inline-block border fz-12 border-primary small px-2 py-8 text-primary truncate-150">
                                                 Chi tiết
                                             </span>

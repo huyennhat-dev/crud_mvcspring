@@ -27,7 +27,7 @@ public class AccountController {
     @GetMapping("/login")
     public String getLoginPage(ModelMap modelMap, @NotNull HttpSession session) {
         String email = (String) session.getAttribute("email");
-        if (email != null) return "redirect:/admin/home";
+        if (email != null) return "redirect:/";
         modelMap.addAttribute("account", new Account());
         return "login";
     }
@@ -44,7 +44,7 @@ public class AccountController {
     @GetMapping("/register")
     public String getRegisterPage(ModelMap modelMap, @NotNull HttpSession session) {
         String email = (String) session.getAttribute("email");
-        if (email != null) return "redirect:/admin/home";
+        if (email != null) return "redirect:/";
         modelMap.addAttribute("account", new Account());
         return "register";
     }

@@ -37,7 +37,8 @@ public class Product {
 
     @NotNull(message = "")
     @NotBlank(message = "")
-    @Size(min = 5, max = 1000, message = "Mô tả không hợp lệ")
+    @Size(min = 5, message = "Mô tả không hợp lệ")
+    @Column(name = "description", length = 65555)
     private String description;
 
     @Column(name = "quantity_purchased")

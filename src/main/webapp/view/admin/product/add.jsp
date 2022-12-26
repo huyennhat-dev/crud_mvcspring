@@ -11,6 +11,14 @@
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
                 <title>Document</title>
+                <style>
+                    .ck.ck-content{
+                        min-height:200px
+                    }
+                    .ck.ck-editor__top{
+                        display:none
+                    }
+                </style>
             </head>
 
             <body>
@@ -46,12 +54,20 @@
                             </div>
                             <div class="form-group">
                                 <form:label path="description">Mô tả sản phẩm</form:label>
-                                <form:textarea class="form-control" path="description"></form:textarea>
+                                <form:textarea id="editor" class="form-control" path="description"></form:textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form:form>
                 </div>
+                <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+                <script>
+                    ClassicEditor
+                        .create( document.querySelector( '#editor' ) )
+                        .catch( error => {
+                            console.error( error );
+                        } );
+                </script>
             </body>
 
             </html>

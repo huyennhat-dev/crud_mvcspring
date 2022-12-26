@@ -33,6 +33,7 @@ public class AccountService {
                accountRepo.save(account);
                Optional<Account> acc=  accountRepo.findOneByEmailIgnoreCaseAndPassword(email, password);
                session.setAttribute("email", email);
+               session.setAttribute("uId", acc.get().getId());
                session.setAttribute("username", username);
                session.setAttribute("uStatus", acc.get().getStatus());
                return "redirect:/";
@@ -52,6 +53,7 @@ public class AccountService {
             Optional<Account> acc=  accountRepo.findOneByEmailIgnoreCaseAndPassword(email, password);
             if(acc.isPresent()){
                 session.setAttribute("email", email);
+                session.setAttribute("uId", acc.get().getId());
                 session.setAttribute("username", acc.get().getUsername());
                 session.setAttribute("uStatus", acc.get().getStatus());
                 return "redirect:/";
