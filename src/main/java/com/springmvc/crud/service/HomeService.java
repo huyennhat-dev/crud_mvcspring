@@ -155,4 +155,32 @@ public class HomeService {
     }
     return "redirect:/auth/login";
   }
+
+  public String getSearchPage(ModelMap modelMap, @NotNull HttpSession session, String key) {
+    Account acc = new Account();
+    String email = (String) session.getAttribute("email");
+    System.out.println(key);
+    if (email != null) {
+      acc.setUsername((String) session.getAttribute("username"));
+      acc.setEmail((String) session.getAttribute("email"));
+      acc.setStatus((int) session.getAttribute("uStatus"));
+      modelMap.addAttribute("account", acc);
+    }
+
+    if(key != null){
+      Iterable<Product> searchResult = productRepo.findAllProduct(key);
+      modelMap.addAttribute("searchResult", searchResult);
+    }
+
+
+
+
+    Iterable<Category> categories = categoryRepo.findAll();
+    modelMap.addAttribute("categories", categories);
+    Iterable<Product> products = productRepo.findAllByStatus(0);
+    modelMap.addAttribute("categories", categories);
+    modelMap.addAttribute("products", products);
+    return "search";
+  }
+
 }

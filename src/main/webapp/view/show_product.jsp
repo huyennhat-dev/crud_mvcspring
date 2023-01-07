@@ -23,7 +23,7 @@
                             <li class="breadcrumb-item active"><a>${category}</a></li>
                         </ol>
                         <div>
-                            <a href="" class="text-primary">
+                            <a href="../cart" class="text-primary">
                                 <i class="ti-shopping-cart"></i> Giỏ hàng
                             </a>
                         </div>
@@ -37,6 +37,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${product.getProductName()}</h5>
                                     <h6 class="card-subtitle  mb-2 text-danger" style="font-size: 16px">${product.getPrice()} đ</h6>
+                                    <h6>Trong kho còn: ${product.getQuantity()}</h6>
+                                    <h6>Lượt mua: ${product.getQuantityPurchased()}</h6>
                                     <%--@elvariable id="product" type=""--%>
                                         <form:form method="POST" action="./${product.getId()}" modelAttribute="product">
                                             <form:input path="id" value="${product.getId()}" type="hidden" />

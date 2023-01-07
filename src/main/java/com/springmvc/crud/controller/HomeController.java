@@ -6,6 +6,7 @@ import com.springmvc.crud.model.Product;
 import com.springmvc.crud.service.HomeService;
 import com.springmvc.crud.service.OderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ public final OderService oderService;
     public  String getCartPage(ModelMap modelMap, HttpSession session){
         return homeService.getCartPage(modelMap, session);
     }
+
     @GetMapping("/cart/delete/{id}")
     public  String deleteCart(ModelMap modelMap, HttpSession session, @PathVariable long id){
         return homeService.deleteChariot(modelMap, session, id);
@@ -55,5 +57,10 @@ public final OderService oderService;
     @PostMapping("/cart")
     public String checkOut(ModelMap modelMap, HttpSession session, @ModelAttribute("oder")Oder oder){
         return oderService.userCheckOut(modelMap, session, oder);
+    }
+
+    @GetMapping("/search")
+    public String getSearchPage(ModelMap modelMap, HttpSession session, @RequestParam("tukhoa") String key){
+        return homeService.getSearchPage(modelMap, session, key);
     }
 }

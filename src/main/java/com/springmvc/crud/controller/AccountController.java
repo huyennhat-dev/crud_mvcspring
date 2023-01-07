@@ -24,6 +24,15 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @GetMapping("/logout")
+    public String getLogout(ModelMap modelMap, @NotNull HttpSession session) {
+        session.removeAttribute("email");
+        session.removeAttribute("uId");
+        session.removeAttribute("username");
+        session.removeAttribute("uStatus");
+         return "redirect:/";
+    }
+
     @GetMapping("/login")
     public String getLoginPage(ModelMap modelMap, @NotNull HttpSession session) {
         String email = (String) session.getAttribute("email");

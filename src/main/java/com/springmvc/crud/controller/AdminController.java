@@ -4,10 +4,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.springmvc.crud.model.Account;
 import com.springmvc.crud.model.Category;
 import com.springmvc.crud.model.Product;
-import com.springmvc.crud.service.AccountService;
-import com.springmvc.crud.service.AdminService;
-import com.springmvc.crud.service.CategoryService;
-import com.springmvc.crud.service.ProductService;
+import com.springmvc.crud.service.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,11 +30,13 @@ public class AdminController {
     public final AdminService adminService;
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OderService oderService;
 
-    public AdminController(AdminService adminService, CategoryService categoryService, ProductService productService) {
+    public AdminController(AdminService adminService, CategoryService categoryService, ProductService productService, OderService oderService) {
         this.adminService = adminService;
         this.categoryService = categoryService;
         this.productService = productService;
+        this.oderService = oderService;
     }
 
 
@@ -147,6 +146,11 @@ public class AdminController {
     @GetMapping("accounts/user/up/{id}")
     public String userUp(ModelMap modelMap, HttpSession session, @PathVariable long id){
         return adminService.userUp(modelMap, session, id);
+    }
+
+    @GetMapping("oders")
+    public String getAllOders(ModelMap modelMap, HttpSession session){
+return oderService.getAdminAllOder(modelMap, session);
     }
 
 }
