@@ -58,7 +58,7 @@
                                             <i class="ti-home"></i> <span class="">Home</span>
                                         </a>
                                     </li>
-                                    <%--                    <li class="header-menu__list-items">--%>
+                                    <!-- <%--                    <li class="header-menu__list-items">--%>
                                         <%--                        <a class="header-menu__list-items-link">--%>
                                             <%--                            <span class="header_items">Danh mục</span>--%>
                                                 <%--                        </a>--%>
@@ -69,43 +69,43 @@
                                                                     <%--                                </li>--%>
                                                                         <%--                            </c:forEach>--%>
                                                                             <%--                        </ul>--%>
-                                                                                <%--                    </li>--%>
-                                                                                    <li class="header-menu__list-items" style="padding: 0 10px 0 10px;">
-                                                                                        <div class="header-search_group">
-                                                                                            <form method="GET" action="./search">
-                                                                                                <input name="tukhoa" autocomplete="off" type="text" class="position-relative" placeholder="Tìm kiếm...">
-                                                                                                <button type="submit" class="position-absolute"><i class="ti-search"></i></button>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                    </li>
-                                                                                    <c:if test="${account.getStatus() == 0}">
-                                                                                        <li class="header-menu__list-items">
-                                                                                            <a href="" class="header-menu__list-items-link">
-                                                                                                <span class="header_items">Giỏ hàng</span>
-                                                                                                <i class="ti-shopping-cart-full"></i></a>
-                                                                                        </li>
-                                                                                    </c:if>
-                                                                                    <c:if test="${empty account.getEmail()}">
-                                                                                        <li class="header-menu__list-items">
-                                                                                            <a href="./auth/login" class="header-menu__list-items-link">
-                                                                                                <span class="">Đăng nhập</span>
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    </c:if>
-                                                                                    <c:if test="${not empty account.getEmail()}">
-                                                                                        <li class="header-menu__list-items">
-                                                                                            <a href="./auth/logout" class="header-menu__list-items-link">
-                                                                                                <span class="">Đăng xuất</span>
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    </c:if>
-                                                                                    <c:if test="${account.getStatus() >= 1}">
-                                                                                        <li class="header-menu__list-items">
-                                                                                            <a href="./admin" class="header-menu__list-items-link">
-                                                                                                <span class="">Quản trị</span>
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    </c:if>
+                                                                                <%--                    </li>--%> -->
+                                    <li class="header-menu__list-items" style="padding: 0 10px 0 10px;">
+                                        <div class="header-search_group">
+                                            <form method="GET" action="./search">
+                                                <input name="tukhoa" autocomplete="off" type="text" class="position-relative" placeholder="Tìm kiếm...">
+                                                <button type="submit" class="position-absolute"><i class="ti-search"></i></button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                    <c:if test="${account.getStatus() == 0}">
+                                        <li class="header-menu__list-items">
+                                            <a href="" class="header-menu__list-items-link">
+                                                <span class="header_items">Giỏ hàng</span>
+                                                <i class="ti-shopping-cart-full"></i></a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${empty account.getEmail()}">
+                                        <li class="header-menu__list-items">
+                                            <a href="./auth/login" class="header-menu__list-items-link">
+                                                <span class="">Đăng nhập</span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${not empty account.getEmail()}">
+                                        <li class="header-menu__list-items">
+                                            <a href="./auth/logout" class="header-menu__list-items-link">
+                                                <span class="">Đăng xuất</span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${account.getStatus() >= 1}">
+                                        <li class="header-menu__list-items">
+                                            <a href="./admin" class="header-menu__list-items-link">
+                                                <span class="">Quản trị</span>
+                                            </a>
+                                        </li>
+                                    </c:if>
 
                                 </ul>
                             </div>
